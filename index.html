@@ -1,456 +1,342 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Tradee</title>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Tradee">
-<meta name="theme-color" content="#0d0d0d">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%231e1e1e'/%3E%3Cpath d='M45 115 L75 85 L95 105 L135 65' stroke='%23ffffff' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='135' cy='65' r='10' fill='%23ffffff'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Timer</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:#0d0d0d}
-body{font-family:'Inter',sans-serif;display:flex;justify-content:center;align-items:center;-webkit-font-smoothing:antialiased;overflow:hidden;color:#fff}
-.app{width:100%;max-width:414px;height:100dvh;background:#0d0d0d;position:relative;display:flex;flex-direction:column;overflow:hidden;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
-@media(min-width:421px){.app{height:90vh;border-radius:40px;box-shadow:0 20px 50px rgba(0,0,0,.5);border:8px solid #1a1a1a;padding:0}}
-.screen{flex:1;overflow-y:auto;padding:24px 20px 110px;display:none;flex-direction:column;gap:16px;scrollbar-width:none;animation:fi .3s}
-.screen>*{flex-shrink:0}
-.screen::-webkit-scrollbar{display:none}.screen.active{display:flex}
-@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.header{display:flex;justify-content:space-between;align-items:center}
-.greeting{font-size:26px;font-weight:700;letter-spacing:-.5px}
-.avatar{width:44px;height:44px;border-radius:50%;background:#de5d83}
-.card{background:#1c1c1e;border-radius:24px;padding:20px;display:flex;flex-direction:column;box-shadow:0 4px 15px rgba(0,0,0,.2)}
-.ct{font-size:16px;font-weight:600;margin-bottom:12px}
-.mut{font-size:12px;color:#888}
-.balance-card{flex-direction:row;justify-content:space-between;padding:20px 16px}
-.goals{display:flex;flex-direction:column;gap:12px;margin-top:20px}
-.gi{display:flex;align-items:center;gap:10px}
-.gicon{width:24px;height:24px;border-radius:50%;background:#2c2c2e;display:flex;align-items:center;justify-content:center;color:#e76f51;font-size:12px}
-.gl{font-size:12px;color:#888;display:block}.gv{font-size:14px;font-weight:600}
-.donut{position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;margin-top:10px}
-.donut svg{width:100%;height:100%;transform:rotate(-90deg)}
-.dbg{stroke:#2c2c2e;stroke-width:12;fill:none}
-.dp{stroke:#f4a261;stroke-width:12;fill:none;stroke-linecap:round;stroke-dasharray:251.2;stroke-dashoffset:251.2;transition:stroke-dashoffset .8s}
-.dt{position:absolute;display:flex;flex-direction:column;align-items:center}
-.dv{font-size:18px;font-weight:700}.du{font-size:10px;color:#888}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid2 .card{padding:16px}.grid2 .ct{font-size:14px;margin-bottom:16px}
-.mv{font-size:16px;font-weight:600;margin-bottom:8px}
-.pb{width:100%;height:6px;background:#2c2c2e;border-radius:3px;overflow:hidden;margin-top:10px}
-.pf{height:100%;border-radius:3px;transition:width .6s;width:0}
-.bars{display:flex;justify-content:space-between;align-items:flex-end;height:80px;gap:8px;margin-bottom:16px}
-.bar{flex:1;background:#2c2c2e;border-radius:4px 4px 0 0;transition:height .6s}
-.bar.a{background:#f4a261}.bar.n{background:#e76f51}
-.in{width:100%;background:#2c2c2e;border:1px solid transparent;border-radius:16px;padding:14px;color:#fff;font-size:16px;font-family:inherit;outline:none;color-scheme:dark}
-.in:focus{border-color:#f4a261}
-textarea.in{resize:none;height:64px;font-size:14px}
-.lbl{font-size:13px;color:#888;padding-left:4px;margin:12px 0 6px;display:block}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.btn{border:none;border-radius:16px;padding:18px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;color:#fff;transition:transform .1s}
-.btn:active{transform:scale(.97)}
-.win{background:#2a9d8f}.loss{background:#e76f51}.pri{background:#f4a261;width:100%;margin-top:14px}
-.ghost{background:none;border:1px solid #2c2c2e;color:#888;border-radius:14px;padding:12px;font-size:14px;font-family:inherit;cursor:pointer;width:100%;margin-top:10px}
-.big{font-size:34px;font-weight:700;letter-spacing:-1px}
-.pos{color:#4caf50}.neg{color:#e76f51}
-.stats{display:flex;gap:8px;margin-top:10px}
-.stats div{flex:1;background:#2c2c2e;border-radius:12px;padding:10px;text-align:center}
-.stats b{display:block;font-size:16px}.stats span{font-size:10px;color:#888}
-.alert{border-radius:14px;padding:12px;font-size:13px;margin-top:12px;background:#2c2c2e;color:#aaa;line-height:1.4}
-.alert.g{background:rgba(42,157,143,.2);color:#6fdccf}.alert.r{background:rgba(231,111,81,.2);color:#ff9d85}
-details summary{font-size:15px;font-weight:600;cursor:pointer;list-style:none}
-details summary::after{content:'▾';float:right;color:#888}
-.hh{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
-.ht{font-size:18px;font-weight:600}
-.hi{background:#1c1c1e;border:1px solid #2c2c2e;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px;margin-top:10px}
-.hd{font-size:13px;color:#888;font-weight:500}
-.ib{width:32px;height:32px;border-radius:10px;background:#2c2c2e;border:none;color:#888;cursor:pointer;font-size:14px;margin-left:6px}
-.hn{font-size:12px;color:#888;font-style:italic}
-.hp{font-size:18px;font-weight:700}
-.tabs{display:none}
-/* goal panel */
-.gp{background:#1c1c1e;border-radius:24px;overflow:hidden}
-.gs{padding:20px;display:flex;flex-direction:column;gap:14px;cursor:pointer}
-.gs .l{font-size:11px;color:#888}.gs .v{font-size:14px;font-weight:600}
-.or{color:#f4a261}
-.cs-m{font-size:16px;font-weight:700;letter-spacing:1px}
-.ra{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
-.sp{display:flex;justify-content:space-between;border-top:1px solid #2c2c2e;padding-top:10px}
-.gform{display:none;padding:0 20px 20px;flex-direction:column}
-.gp.open .gform{display:flex}
-.gp.open .gs{padding-bottom:6px}
-/* plan boxes */
-.pg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pbx{background:#2c2c2e;border-radius:16px;padding:14px}
-.pbx.highlight{background:linear-gradient(135deg,rgba(244,162,97,.2),rgba(244,162,97,.05))}
-.pbx.success{background:linear-gradient(135deg,rgba(42,157,143,.2),rgba(42,157,143,.05))}
-.pbx.warning{background:linear-gradient(135deg,rgba(231,111,81,.2),rgba(231,111,81,.05))}
-.pbx b{font-size:20px;display:block;margin-bottom:4px}.pbx span{font-size:12px;font-weight:600;display:block}.pbx small{font-size:10px;color:#888}
-/* calendar widget */
-.cal{background:#161618;border-radius:28px;padding:18px 20px;border:1px solid #232325}
-.ctop,.cctrl{display:none}
-.cmain{display:flex;gap:16px;cursor:pointer}
-.cl{flex:0 0 40%;display:flex;flex-direction:column;justify-content:space-between}
-.cwd{font-size:14px;font-weight:600;letter-spacing:.5px}
-.cdn{font-size:60px;font-weight:300;line-height:1;margin-top:4px}
-.ccap{font-size:13px;font-weight:600;color:#555}
-.cr{flex:1}
-.cm{font-size:14px;font-weight:700;letter-spacing:.5px;margin-bottom:8px}
-.cg{display:grid;grid-template-columns:repeat(7,1fr);row-gap:2px;text-align:center}
-.cg i{font-style:normal;font-size:11px;font-weight:600;padding:4px 0;border-radius:8px;position:relative}
-.cg .w{color:#fff;font-size:10px}.cg .we{color:#666}
-.td{background:#eee;color:#111!important}
-.cal.open{padding:18px 16px}
-.cal.open .ctop{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.cal.open .cctrl{display:block}
-.cal.open .cl,.cal.open .cm{display:none}
-.cal.open .cmain{cursor:default}
-.cal.open .cg{row-gap:4px}
-.cal.open .cg i{font-size:14px;padding:10px 0;cursor:pointer}
-.cal.open .cg .w{cursor:default;font-size:11px;color:#888;padding:4px 0}
-.cal.open .cg .in2,.in2{background:rgba(244,162,97,.25)!important;color:#fff;border-radius:0}
-.in2.st{border-radius:10px 0 0 10px!important;background:#f4a261!important}
-.in2.en{border-radius:0 10px 10px 0!important;background:#f4a261!important}
-.in2.st.en{border-radius:10px!important}
-.cal.open .g::after,.cal.open .r::after{content:'';position:absolute;bottom:2px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%}
-.cal.open .g::after{background:#4caf50}.cal.open .r::after{background:#e76f51}
-.nv{background:#2c2c2e;border:none;color:#fff;width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer}
-.chips{display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid #2c2c2e;margin-top:14px;padding-top:14px}
-.chip{background:#2c2c2e;color:#fff;border:none;padding:9px 14px;border-radius:20px;font-size:13px;font-family:inherit;cursor:pointer}
-.dr{display:flex;gap:8px;margin-top:12px}
-.dr input{flex:1;background:#2c2c2e;border:none;border-radius:12px;padding:10px;color:#fff;font-family:inherit;font-size:13px;color-scheme:dark;min-width:0}
-/* nav */
-.nav{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:#1c1c1e;border-radius:40px;display:flex;align-items:center;padding:8px 12px;gap:16px;box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:10;margin-bottom:env(safe-area-inset-bottom)}
-.ni{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:#888;cursor:pointer;transition:.2s}
-.ni svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
-.ni.active{background:#fff;color:#1c1c1e}
-.ni.add{background:#f4a261;color:#fff;width:48px;height:48px;transform:translateY(-8px);box-shadow:0 4px 12px rgba(244,162,97,.4)}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Arial Rounded MT Bold", sans-serif;
+    height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+}
+
+.display {
+    font-size: clamp(80px, 19vw, 190px);
+    font-weight: 900;
+    letter-spacing: -5px;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    user-select: none;
+    line-height: 1;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    margin-top: 45px;
+    width: 100%;
+    padding: 20px;
+}
+
+.modes {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    color: white;
+    background: #242424;
+    border-radius: 16px;
+    padding: 15px 23px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+button.active {
+    background: white;
+    color: black;
+}
+
+.time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+input {
+    width: 85px;
+    height: 65px;
+    background: #1c1c1e;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 27px;
+    font-weight: 800;
+    outline: none;
+}
+
+.separator {
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.main-button {
+    background: white;
+    color: black;
+    width: 200px;
+    padding: 19px;
+    border-radius: 20px;
+    font-size: 19px;
+}
+
+.secondary {
+    background: #242424;
+}
+
+.extra {
+    display: flex;
+    gap: 12px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.running .controls {
+    display: none;
+}
+
+.running .display {
+    font-size: clamp(90px, 22vw, 220px);
+}
+
+@media (orientation: landscape) {
+    .display {
+        font-size: min(24vw, 35vh);
+    }
+
+    .running .display {
+        font-size: min(27vw, 45vh);
+    }
+}
 </style>
 </head>
+
 <body>
-<div class="app">
 
-<!-- ГЛАВНАЯ -->
-<div id="screen-home" class="screen active">
-  <div class="header"><h1 class="greeting">Trader Blog</h1><div class="avatar"></div></div>
-  <div class="card balance-card">
-    <div>
-      <div class="ct">Статистика за месяц</div>
-      <div class="goals">
-        <div class="gi"><div class="gicon">⇅</div><div><span class="gl">Сделок</span><span class="gv" id="h-trades">0</span></div></div>
-        <div class="gi"><div class="gicon">◎</div><div><span class="gl">Win Rate</span><span class="gv" id="h-wr">0%</span></div></div>
-        <div class="gi"><div class="gicon">✓</div><div><span class="gl">Успешных дней</span><span class="gv" id="h-days">0</span></div></div>
-      </div>
-    </div>
-    <div class="donut">
-      <svg viewBox="0 0 100 100"><circle class="dbg" cx="50" cy="50" r="40"/><circle id="dp" class="dp" cx="50" cy="50" r="40"/></svg>
-      <div class="dt"><span class="dv" id="h-profit">$0</span><span class="du">За месяц</span></div>
-    </div>
-  </div>
-  <div class="grid2">
-    <div class="card"><div class="ct">Сегодня</div><div class="mv" id="h-today">$0</div><div class="mut" id="h-tg">Цель: —</div><div class="pb"><div class="pf" id="h-tp"></div></div></div>
-    <div class="card"><div class="ct">За неделю</div><div class="mv" id="h-week">$0</div><div class="mut" id="h-wg">Цель: —</div><div class="pb"><div class="pf" id="h-wp"></div></div></div>
-  </div>
-  <div class="card"><div class="ct">График прибыли</div><div class="mut" style="margin-bottom:20px">Последние 7 торговых дней</div><div class="bars" id="chart"></div></div>
-</div>
+<div class="app" id="app">
 
-<!-- УПРАВЛЕНИЕ -->
-<div id="screen-manage" class="screen">
-  <div class="header"><h1 class="greeting">Управление</h1><div class="avatar"></div></div>
-  <div class="card">
-    <div class="row"><div class="ct" style="margin:0">День</div><input type="date" id="sdate" class="in" style="width:auto;padding:10px 12px;font-size:14px" onchange="sel=this.value||sel;renderManage()"></div>
-    <div style="margin-top:16px"><div class="big" id="d-profit">$0</div></div>
-    <div class="stats">
-      <div><b id="d-t">0</b><span>Сделок</span></div>
-      <div><b id="d-w" class="pos">0</b><span>Плюсов</span></div>
-      <div><b id="d-l" class="neg">0</b><span>Минусов</span></div>
-      <div><b id="d-wr">0%</b><span>Win Rate</span></div>
+    <div class="display" id="display" onclick="toggleControls()">
+        00:00
     </div>
-    <div class="pb"><div class="pf" id="d-bar" style="background:#f4a261"></div></div>
-    <div class="alert" id="d-alert"></div>
-    <label class="lbl">Ставка ($) · выплата 92%</label>
-    <input type="number" inputmode="decimal" class="in" id="stake">
-    <div class="r2"><button class="btn win" onclick="addT(1)">＋ Плюс</button><button class="btn loss" onclick="addT(0)">− Минус</button></div>
-    <button class="ghost" onclick="undo()">↶ Отменить последнюю сделку</button>
-    <label class="lbl">Заметка дня</label>
-    <textarea class="in" id="note" placeholder="Эмоции, ошибки, выводы…" onchange="saveNote()"></textarea>
-  </div>
-  <details class="card">
-    <summary>Ввести итоги вручную</summary>
-    <div class="mut" style="margin-top:8px">Заменит данные выбранного дня</div>
-    <label class="lbl">Количество сделок</label><input type="number" class="in" id="m-total" min="0">
-    <label class="lbl">Успешных сделок</label><input type="number" class="in" id="m-succ" min="0">
-    <label class="lbl">Прибыль (убыток с минусом)</label><input type="number" inputmode="decimal" class="in" id="m-profit">
-    <button class="btn pri" onclick="manual()">Сохранить день</button>
-  </details>
-  <div class="hh"><div class="ht">История</div><button class="ib" style="width:auto;padding:0 10px;color:#e76f51;background:none" onclick="clearAll()">Очистить всё</button></div>
-  <div id="hist"></div>
-</div>
 
-<!-- ПЛАН -->
-<div id="screen-plan" class="screen">
-  <div class="header"><h1 class="greeting">План торговли</h1><div class="avatar"></div></div>
+    <div class="controls" id="controls">
 
-  <div class="gp" id="gp">
-    <div class="gs" onclick="tgl()">
-      <div class="row" style="align-items:flex-start">
-        <div><div class="l">Цель на месяц</div><div class="v or" id="g-goal" style="font-size:18px">—</div><div class="pb" style="width:120px;height:4px"><div class="pf" id="g-bar" style="background:#f4a261"></div></div></div>
-        <div class="cs-m" id="g-month"></div>
-      </div>
-      <div class="row">
-        <div><div class="l">Плюсов в день для цели</div><div class="v" id="g-trades">—</div><div class="l" id="g-sub"></div></div>
-        <div class="ra"><div class="l">План торговли</div><div class="v" id="g-lots">—</div></div>
-      </div>
-      <div class="sp">
-        <div><div class="l">Стоп план (профит)</div><div class="v pos" id="g-sp">—</div></div>
-        <div class="ra"><div class="l">Стоп план (убыток)</div><div class="v neg" id="g-sl">—</div></div>
-      </div>
+        <div class="modes">
+            <button id="timerMode" class="active" onclick="setMode('timer')">
+                Таймер
+            </button>
+
+            <button id="stopwatchMode" onclick="setMode('stopwatch')">
+                Секундомер
+            </button>
+        </div>
+
+        <div class="time-inputs" id="timeInputs">
+            <input id="minutes" type="number" min="0" max="999" value="5">
+            <span class="separator">:</span>
+            <input id="seconds" type="number" min="0" max="59" value="0">
+        </div>
+
+        <button class="main-button" id="startButton" onclick="startTimer()">
+            НАЧАТЬ
+        </button>
+
+        <div class="extra">
+            <button class="secondary" onclick="resetTimer()">
+                Сброс
+            </button>
+
+            <button class="secondary" onclick="toggleLandscape()">
+                ↔ Горизонтально
+            </button>
+        </div>
+
     </div>
-    <div class="gform">
-      <label class="lbl">Баланс на начало месяца ($)</label><input type="number" inputmode="decimal" class="in" id="gb">
-      <label class="lbl">Цель по заработку за месяц ($) — пусто = +50%</label><input type="number" inputmode="decimal" class="in" id="gg">
-      <button class="btn pri" onclick="saveG()">Сохранить</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="ct" style="margin-bottom:4px">Статистика</div>
-    <div class="mut" id="p-label" style="margin-bottom:14px"></div>
-    <div class="pg" id="pbox"></div>
-  </div>
-
-  <div class="cal" id="cal">
-    <div class="ctop"><button class="nv" onclick="nav(-1)">‹</button><b id="ctitle"></b><button class="nv" onclick="nav(1)">›</button></div>
-    <div class="cmain" onclick="if(!$('cal').classList.contains('open'))tglCal()">
-      <div class="cl"><div><div class="cwd" id="cwd"></div><div class="cdn" id="cdn"></div></div><div class="ccap" id="ccap"></div></div>
-      <div class="cr"><div class="cm" id="cm"></div><div class="cg" id="cg"></div></div>
-    </div>
-    <div class="cctrl">
-      <div class="chips">
-        <button class="chip" onclick="chip('today')">Сегодня</button><button class="chip" onclick="chip('week')">Неделя</button>
-        <button class="chip" onclick="chip('month')">Месяц</button><button class="chip" onclick="chip('l30')">30 дней</button>
-      </div>
-      <div class="mut" style="margin-top:12px">Тапни день или два дня — начало и конец периода</div>
-      <div class="dr"><input type="date" id="ds" onchange="dates()"><input type="date" id="de" onchange="dates()"></div>
-      <button class="btn pri" onclick="tglCal()">Готово</button>
-    </div>
-  </div>
-</div>
-
-<div class="nav">
-  <div class="ni active" onclick="go('home',0)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-  <div class="ni add" onclick="go('manage',1)"><svg viewBox="0 0 24 24" style="stroke-width:2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
-  <div class="ni" onclick="go('plan',2)"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-</div>
 </div>
 
 <script>
-const $=id=>document.getElementById(id);
-const pad=n=>String(n).padStart(2,'0');
-const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const pd=s=>{const[a,b,c]=s.split('-');return new Date(a,b-1,c)};
-const mk=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}`;
-const MN=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-const money=n=>'$'+(+Math.abs(n).toFixed(2));
-const sg=n=>(n<0?'-':'+')+money(n);
-const fd=s=>pd(s).toLocaleDateString('ru-RU',{day:'numeric',month:'short'});
-const cl=(a,b,c)=>Math.min(Math.max(a,b),c);
-let E=[],M={},sel=ymd(new Date()),rs,re,label='Месяц',picking=false,vm;
+let mode = "timer";
+let elapsed = 0;
+let duration = 300;
+let interval = null;
+let running = false;
+let paused = false;
+let controlsVisible = true;
 
-function load(){
-  try{E=JSON.parse(localStorage.getItem('tradee_v4'))}catch(e){E=null}
-  if(!E){E=[];try{(JSON.parse(localStorage.getItem('tradee_data_v3'))||[]).forEach(x=>{const d=ymd(new Date(x.date));let e=E.find(q=>q.date==d);if(!e)E.push(e={date:d,total:0,success:0,profit:0,note:'',log:[]});e.total+=x.total;e.success+=x.success;e.profit+=x.profit})}catch(e){}}
-  try{M=JSON.parse(localStorage.getItem('tradee_months'))||{}}catch(e){M={}}
-  if(!Object.keys(M).length){try{const s=JSON.parse(localStorage.getItem('tradee_settings_v1'));if(s&&s.balance)M[mk(new Date())]={balance:s.balance,goal:s.balance*.5}}catch(e){}}
-}
-const save=()=>{try{localStorage.setItem('tradee_v4',JSON.stringify(E));localStorage.setItem('tradee_months',JSON.stringify(M))}catch(e){}};
-const ge=(d,c)=>{let e=E.find(x=>x.date==d);if(!e&&c)E.push(e={date:d,total:0,success:0,profit:0,note:'',log:[]});return e};
-function commit(){E=E.filter(x=>x.total>0||x.note);E.sort((a,b)=>b.date.localeCompare(a.date));save();renderAll()}
+const display = document.getElementById("display");
+const app = document.getElementById("app");
+const controls = document.getElementById("controls");
+const startButton = document.getElementById("startButton");
+const timeInputs = document.getElementById("timeInputs");
 
-// торговые дни (пн–пт) в месяце
-function wdays(y,m){let n=0;const c=new Date(y,m+1,0).getDate();for(let i=1;i<=c;i++){const w=new Date(y,m,i).getDay();if(w&&w<6)n++}return n}
-// расчёт плана: ставка 1% от баланса, выплата 92%
-function plan(d){
-  const s=M[mk(d)];if(!s)return null;
-  const n=wdays(d.getFullYear(),d.getMonth()),ppt=s.balance*.01*.92,pdg=s.goal/n;
-  return{b:s.balance,g:s.goal,n,pdg,t:Math.ceil(pdg/ppt-1e-9)};
-}
+function formatTime(time) {
+    let total = Math.floor(time / 1000);
 
-function go(n,i){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-'+n).classList.add('active');document.querySelectorAll('.ni').forEach((x,j)=>x.classList.toggle('active',j==i&&j!=1))}
+    let h = Math.floor(total / 3600);
+    let m = Math.floor((total % 3600) / 60);
+    let s = total % 60;
 
-/* ===== ТРЕКЕР ДНЯ ===== */
-function addT(w){
-  const st=parseFloat($('stake').value);if(!(st>0))return;
-  const p=w?+(st*.92).toFixed(2):-st,e=ge(sel,1);
-  e.total++;if(w)e.success++;e.profit=+(e.profit+p).toFixed(2);e.log.push(p);commit();
-}
-function undo(){
-  const e=ge(sel);if(!e||!e.log||!e.log.length)return;
-  const p=e.log.pop();e.total--;if(p>0)e.success--;e.profit=+(e.profit-p).toFixed(2);commit();
-}
-function manual(){
-  const t=parseInt($('m-total').value)||0,s=Math.min(parseInt($('m-succ').value)||0,t),p=parseFloat($('m-profit').value)||0;
-  if(t<=0)return;
-  Object.assign(ge(sel,1),{total:t,success:s,profit:p,log:[]});
-  ['m-total','m-succ','m-profit'].forEach(i=>$(i).value='');
-  document.querySelector('details').open=false;commit();
-}
-function saveNote(){const v=$('note').value.trim(),e=ge(sel,!!v);if(e){e.note=v;commit()}}
-function delDay(d){if(confirm('Удалить этот день?')){E=E.filter(x=>x.date!=d);commit()}}
-function editDay(d){sel=d;renderManage();$('screen-manage').scrollTo({top:0,behavior:'smooth'})}
-function clearAll(){if(confirm('Очистить всю историю?')){E=[];commit()}}
+    if (h > 0) {
+        return String(h).padStart(2, "0") + ":" +
+               String(m).padStart(2, "0") + ":" +
+               String(s).padStart(2, "0");
+    }
 
-function renderManage(){
-  $('sdate').value=sel;
-  const e=ge(sel)||{total:0,success:0,profit:0,note:''},p=plan(pd(sel));
-  if(!$('stake').value)$('stake').value=p?+(p.b*.01).toFixed(2):'';
-  const l=e.total-e.success;
-  $('d-profit').textContent=sg(e.profit);$('d-profit').className='big '+(e.profit>=0?'pos':'neg');
-  $('d-t').textContent=e.total;$('d-w').textContent=e.success;$('d-l').textContent=l;
-  $('d-wr').textContent=(e.total?Math.round(e.success/e.total*100):0)+'%';
-  $('note').value=e.note||'';
-  const a=$('d-alert');
-  if(!p){a.className='alert';a.textContent='Задай баланс и цель в разделе «План», чтобы видеть лимиты и цель по сделкам.';$('d-bar').style.width='0'}
-  else{
-    const sl=p.b*.10,sp=p.b*.05;
-    $('d-bar').style.width=cl(e.success/p.t,0,1)*100+'%';
-    if(e.profit<=-sl){a.className='alert r';a.textContent=`⛔ Стоп-убыток −${money(sl)} достигнут. Закрывай терминал на сегодня.`}
-    else if(e.profit>=sp){a.className='alert g';a.textContent=`✅ Стоп-профит +${money(sp)} достигнут. Можно заканчивать день.`}
-    else{a.className='alert';a.innerHTML=`Плюсов: <b>${e.success} из ${p.t}</b> по плану · цель дня ${money(p.pdg)}<br>Стоп: −${money(sl)} / +${money(sp)}`}
-  }
-  const h=$('hist');
-  h.innerHTML=E.length?E.map(x=>{
-    const wr=x.total?Math.round(x.success/x.total*100):0,d=pd(x.date).toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
-    return `<div class="hi"><div class="row"><span class="hd">${d}</span><div><button class="ib" onclick="editDay('${x.date}')">✎</button><button class="ib" onclick="delDay('${x.date}')">✕</button></div></div>
-    <div class="row"><div style="font-size:13px">Сделок: ${x.total} · Win Rate: ${wr}%</div><div class="hp ${x.profit>=0?'pos':'neg'}">${sg(x.profit)}</div></div>${x.note?`<div class="hn">${x.note.replace(/</g,'&lt;')}</div>`:''}</div>`}).join(''):'<div class="mut" style="text-align:center;padding:20px">История пуста</div>';
+    return String(m).padStart(2, "0") + ":" +
+           String(s).padStart(2, "0");
 }
 
-/* ===== ГЛАВНАЯ ===== */
-function renderHome(){
-  const now=new Date(),k=mk(now),t=ymd(now),p=plan(now);
-  const s=new Date(now);s.setDate(now.getDate()-(now.getDay()+6)%7);const e=new Date(s);e.setDate(s.getDate()+6);
-  const ws=ymd(s),we=ymd(e);
-  let tr=0,su=0,pr=0,dy=0,td=0,wk=0;
-  E.forEach(x=>{if(x.date.startsWith(k)){tr+=x.total;su+=x.success;pr+=x.profit;if(x.profit>0)dy++}if(x.date==t)td+=x.profit;if(x.date>=ws&&x.date<=we)wk+=x.profit});
-  $('h-trades').textContent=tr;$('h-wr').textContent=(tr?Math.round(su/tr*100):0)+'%';$('h-days').textContent=dy;$('h-profit').textContent=(pr<0?'-':'')+money(pr);
-  const dg=p?p.pdg:0,wg=dg*5,mg=p?p.g:0;
-  const set=(v,id,gid,pid,g,c)=>{$(id).textContent=sg(v);$(id).style.color=v>=0?'#4caf50':'#e76f51';$(gid).textContent='Цель: '+(g?money(g):'—');$(pid).style.width=(g?cl(Math.abs(v)/g,0,1)*100:0)+'%';$(pid).style.background=v>=0?c:'#e76f51'};
-  set(td,'h-today','h-tg','h-tp',dg,'#2a9d8f');set(wk,'h-week','h-wg','h-wp',wg,'#a7c957');
-  $('dp').style.strokeDashoffset=251.2-251.2*(mg?cl(pr/mg,0,1):0);
-  const last=E.slice(0,7).reverse(),mx=Math.max(...last.map(d=>Math.abs(d.profit)),10);
-  let h='';last.forEach((d,i)=>h+=`<div class="bar${i==last.length-1?' a':''}${d.profit<0?' n':''}" style="height:${Math.max(Math.abs(d.profit)/mx*100,10)}%"></div>`);
-  for(let i=last.length;i<7;i++)h+='<div class="bar" style="height:5%"></div>';
-  $('chart').innerHTML=h;
+function updateDisplay() {
+    let time = mode === "timer"
+        ? Math.max(0, duration - elapsed)
+        : elapsed;
+
+    display.textContent = formatTime(time);
 }
 
-/* ===== ПЛАН: ЦЕЛЬ ===== */
-function tgl(){
-  const g=$('gp');g.classList.toggle('open');
-  if(g.classList.contains('open')){
-    const n=new Date(),s=M[mk(n)];
-    if(s){$('gb').value=s.balance;$('gg').value=s.goal}
-    else{const pm=new Date(n.getFullYear(),n.getMonth()-1,1),ps=M[mk(pm)];
-      if(ps)$('gb').value=+(ps.balance+E.filter(x=>x.date.startsWith(mk(pm))).reduce((a,x)=>a+x.profit,0)).toFixed(2)}
-  }
-}
-function saveG(){
-  const b=parseFloat($('gb').value);if(!(b>0))return;
-  let g=parseFloat($('gg').value);if(!(g>0))g=b*.5;
-  M[mk(new Date())]={balance:b,goal:g};$('stake').value='';
-  $('gp').classList.remove('open');save();renderAll();
-}
-function renderGoal(){
-  const n=new Date(),p=plan(n),k=mk(n);
-  $('g-month').textContent=MN[n.getMonth()].toUpperCase();
-  const pr=E.filter(x=>x.date.startsWith(k)).reduce((a,x)=>a+x.profit,0);
-  if(!p){
-    $('g-goal').textContent='Нажми и задай баланс и цель';
-    ['g-trades','g-lots','g-sp','g-sl'].forEach(i=>$(i).textContent='—');$('g-sub').textContent='';$('g-bar').style.width='0';
-    if(!$('gp').dataset.asked){$('gp').dataset.asked=1}
-    return;
-  }
-  const a=n=>money(n);
-  $('g-goal').textContent=a(p.g);$('g-bar').style.width=cl(pr/p.g,0,1)*100+'%';
-  $('g-trades').textContent=p.t+' плюсов';
-  $('g-sub').textContent=`≈ ${a(p.pdg)} в день · ${p.n} торг. дн. · ставка ${a(p.b*.01)}`;
-  $('g-lots').textContent=[.01,.02,.05].map(x=>a(p.b*x)).join(' - ');
-  $('g-sp').textContent='+'+a(p.b*.05);$('g-sl').textContent='-'+a(p.b*.10);
+function setMode(newMode) {
+    if (running) return;
+
+    mode = newMode;
+    elapsed = 0;
+
+    document.getElementById("timerMode")
+        .classList.toggle("active", mode === "timer");
+
+    document.getElementById("stopwatchMode")
+        .classList.toggle("active", mode === "stopwatch");
+
+    timeInputs.classList.toggle("hidden", mode !== "timer");
+
+    updateDisplay();
 }
 
-/* ===== ПЛАН: СТАТИСТИКА ПЕРИОДА ===== */
-function renderStats(){
-  let t=0,s=0,pr=0,sd=0,dn=0;
-  E.forEach(x=>{if(x.date>=rs&&x.date<=re){t+=x.total;s+=x.success;pr+=x.profit;dn++;if(x.profit>0)sd++}});
-  $('p-label').textContent=label||(rs==re?fd(rs):fd(rs)+' — '+fd(re));
-  const wr=t?Math.round(s/t*100):0;
-  $('pbox').innerHTML=[
-    ['highlight',(pr<0?'-':'')+money(pr),'Прибыль','Чистая прибыль'],
-    ['success',wr+'%','Win Rate',s+' из '+t],
-    ['',t,'Всего сделок','За период'],
-    ['warning',sd,'Дней в плюсе','из '+dn+' торговых'],
-    ['',dn?sg(pr/dn):'—','Среднее в день','По дням с записью'],
-    ['',t?(t-s):0,'Минусов','Убыточные сделки']
-  ].map(b=>`<div class="pbx ${b[0]}"><b>${b[1]}</b><span>${b[2]}</span><small>${b[3]}</small></div>`).join('');
+function startTimer() {
+    if (running) {
+        stopTimer();
+        return;
+    }
+
+    if (mode === "timer" && !paused) {
+        let min = Math.max(0, Number(document.getElementById("minutes").value) || 0);
+        let sec = Math.max(0, Math.min(59, Number(document.getElementById("seconds").value) || 0));
+
+        duration = (min * 60 + sec) * 1000;
+
+        if (duration <= 0) return;
+    }
+
+    running = true;
+    paused = false;
+
+    app.classList.add("running");
+
+    startButton.textContent = "ПАУЗА";
+
+    let lastTime = Date.now();
+
+    interval = setInterval(() => {
+        let now = Date.now();
+        elapsed += now - lastTime;
+        lastTime = now;
+
+        if (mode === "timer" && elapsed >= duration) {
+            elapsed = duration;
+            updateDisplay();
+            stopTimer();
+            return;
+        }
+
+        updateDisplay();
+
+    }, 50);
 }
 
-/* ===== КАЛЕНДАРЬ-ВИДЖЕТ ===== */
-function tglCal(){
-  const c=$('cal');c.classList.toggle('open');
-  if(c.classList.contains('open')){const d=pd(rs);vm={y:d.getFullYear(),m:d.getMonth()};setTimeout(()=>c.scrollIntoView({behavior:'smooth',block:'end'}),50)}
-  renderCal();
-}
-function nav(d){vm.m+=d;if(vm.m<0){vm.m=11;vm.y--}if(vm.m>11){vm.m=0;vm.y++}renderCal()}
-function pick(d){
-  if(!$('cal').classList.contains('open'))return;
-  if(!picking){rs=re=d;picking=true}else{if(d<rs){re=rs;rs=d}else re=d;picking=false}
-  label=null;renderPlan();
-}
-function dates(){const a=$('ds').value,b=$('de').value;if(a&&b){rs=a<b?a:b;re=a<b?b:a;label=null;picking=false;renderPlan()}}
-function chip(t){
-  const n=new Date(),y=n.getFullYear(),m=n.getMonth();let a,b,l;
-  if(t=='today'){a=b=ymd(n);l='Сегодня'}
-  else if(t=='week'){const s=new Date(n);s.setDate(n.getDate()-(n.getDay()+6)%7);const e=new Date(s);e.setDate(s.getDate()+6);a=ymd(s);b=ymd(e);l='Неделя'}
-  else if(t=='month'){a=ymd(new Date(y,m,1));b=ymd(new Date(y,m+1,0));l='Месяц'}
-  else{const s=new Date(n);s.setDate(n.getDate()-29);a=ymd(s);b=ymd(n);l='Последние 30 дней'}
-  rs=a;re=b;label=l;picking=false;
-  $('cal').classList.remove('open');renderPlan();
-}
-function renderCal(){
-  const open=$('cal').classList.contains('open'),now=new Date(),t=ymd(now);
-  const v=open?vm:{y:now.getFullYear(),m:now.getMonth()};
-  $('cwd').textContent=now.toLocaleDateString('ru-RU',{weekday:'long'}).toUpperCase();
-  $('cdn').textContent=now.getDate();
-  const te=ge(t);$('ccap').textContent=te&&te.total?'Сегодня '+sg(te.profit):'Нет сделок';
-  $('cm').textContent=MN[v.m].toUpperCase();$('ctitle').textContent=MN[v.m]+' '+v.y;
-  $('ds').value=rs;$('de').value=re;
-  let h='';'ПВСЧПСВ'.split('').forEach((c,i)=>h+=`<i class="w${i>4?' we':''}">${c}</i>`);
-  const first=(new Date(v.y,v.m,1).getDay()+6)%7,dim=new Date(v.y,v.m+1,0).getDate();
-  for(let i=0;i<first;i++)h+='<i></i>';
-  for(let d=1;d<=dim;d++){
-    const ds=`${v.y}-${pad(v.m+1)}-${pad(d)}`,e=ge(ds);
-    let c=(first+d-1)%7>4?'we':'';
-    if(ds==t)c+=' td';
-    if(open&&ds>=rs&&ds<=re)c+=' in2'+(ds==rs?' st':'')+(ds==re?' en':'');
-    if(e&&e.total)c+=e.profit>=0?' g':' r';
-    h+=`<i class="${c}" onclick="pick('${ds}')">${d}</i>`;
-  }
-  $('cg').innerHTML=h;
+function stopTimer() {
+    clearInterval(interval);
+    interval = null;
+
+    running = false;
+    paused = true;
+
+    app.classList.remove("running");
+
+    startButton.textContent = "ПРОДОЛЖИТЬ";
+    controlsVisible = true;
 }
 
-function renderPlan(){renderGoal();renderStats();renderCal()}
-function renderAll(){renderHome();renderManage();renderPlan()}
+function resetTimer() {
+    clearInterval(interval);
+    interval = null;
 
-window.onload=()=>{
-  load();
-  const n=new Date();rs=ymd(new Date(n.getFullYear(),n.getMonth(),1));re=ymd(new Date(n.getFullYear(),n.getMonth()+1,0));
-  renderAll();
-};
+    running = false;
+    paused = false;
+    elapsed = 0;
+
+    app.classList.remove("running");
+
+    startButton.textContent = "НАЧАТЬ";
+
+    updateDisplay();
+}
+
+function toggleControls() {
+    if (!running) return;
+
+    // Открываем управление по нажатию на цифры
+    stopTimer();
+}
+
+async function toggleLandscape() {
+    try {
+        if (!document.fullscreenElement) {
+            await document.documentElement.requestFullscreen();
+        }
+
+        if (screen.orientation && screen.orientation.lock) {
+            await screen.orientation.lock("landscape");
+        }
+    } catch (error) {
+        console.log("Ориентация управляется настройками устройства");
+    }
+}
+
+// Обновление при повороте устройства
+window.addEventListener("resize", updateDisplay);
+
+updateDisplay();
 </script>
+
 </body>
 </html>
